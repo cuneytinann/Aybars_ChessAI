@@ -4,9 +4,9 @@
 
 ▶ **[Play in your browser](https://cuneytinann.github.io/Aybars_ChessAI/)**
 
-**A chess bot that plays at about 2,500–2,600 on Stockfish's scale, in a single 7,945-byte HTML file.**
+**A chess bot that plays at about 2,500–2,600 on Stockfish's scale, in a single 7,935-byte HTML file.**
 
-Aybars is [FideLite](https://www.fidelite.art)'s arbiter at the `L2` rule level with a search engine built on top. You play White, or Black in `black.html`, and Aybars answers. Against Stockfish with its strength limited by `UCI_Elo`, it scores like a ~2,520 player at 1 second per move and ~2,585 at 2 seconds. That scale is roughly the CCRL Blitz engine list, not a human FIDE rating. The whole page (board, interface, rules and bot) is 7,945 bytes; zipped, 4,731.
+Aybars is [FideLite](https://www.fidelite.art)'s arbiter at the `L2` rule level with a search engine built on top. You play White, or Black in `black.html`, and Aybars answers. Against Stockfish with its strength limited by `UCI_Elo`, it scores like a ~2,520 player at 1 second per move and ~2,585 at 2 seconds. That scale is roughly the CCRL Blitz engine list, not a human FIDE rating. The whole page (board, interface, rules and bot) is 7,935 bytes; zipped, 4,731.
 
 The rules are FideLite's: legal moves, castling, en passant, promotion, check, mate and stalemate, insufficient material, the locked-pawn detector `l` (FIDE 5.2.2), and the repetition and 50-move counters. How each of them is read and applied is documented at **[fidelite.art](https://www.fidelite.art)**. This README covers only what Aybars adds: the bot, and the handful of changes the rule layer needed to carry it.
 
@@ -16,7 +16,7 @@ The rules are FideLite's: legal moves, castling, en passant, promotion, check, m
 |---|---|
 | **Base** | FideLite's `L2` rule level (counters and automatic draws; no clock, offers or claims), in the forms of `engine_4x.js`, FideLite's faster build |
 | **What's added** | a search (alpha-beta with iterative deepening, a transposition table, quiescence) and an evaluation (material, piece-square tables, pawn structure, mobility, mating a bare king) |
-| **Size** | one file, 7,945 bytes; 4,731 bytes zipped. The bot adds 5,719 bytes to FideLite's `L2` (2,226 bytes) |
+| **Size** | one file, 7,935 bytes; 4,731 bytes zipped. The bot adds 5,723 bytes to FideLite's `L2` (2,212 bytes) |
 | **Strength** | ~2,520 at 1 s per move, ~2,585 at 2 s, against limited Stockfish (100 games each, ±35) |
 | **Thinking time** | a 2-second budget per move; about 1 second used on average, because the search stops at 12 plies |
 | **Locked pawns** | a king-and-pawn structure in which neither side can ever mate ends the game as a draw (`DP`), through FideLite's detector |
@@ -52,7 +52,7 @@ Everything not in the table is FideLite's, byte for byte, apart from the `indexO
 
 ## The bot
 
-Everything after the first `d();` in the script is the bot: 5,510 bytes.
+Everything after the first `d();` in the script is the bot: 5,504 bytes.
 
 | part | what it does |
 |---|---|
@@ -89,11 +89,11 @@ The scope is a bot on top of an arbiter, not a new engine. The rule layer is car
 
 | file | size | contents |
 |---|---|---|
-| `index.html` | 7,945 B | game, rules and bot; you play White |
-| `black.html` | 7,944 B | the same with you playing Black: the board turned (`w^7` instead of `w^56`) and the bot's colour `D` set from 0 to 1 |
+| `index.html` | 7,935 B | game, rules and bot; you play White |
+| `black.html` | 7,934 B | the same with you playing Black: the board turned (`w^7` instead of `w^56`) and the bot's colour `D` set from 0 to 1 |
 | `LICENSE` | | MIT License |
 
-Zipped with zopfli (`advzip -z -4`), `index.html` comes to 4,731 bytes and `black.html` to 4,743; with `zip -9`, `index.html` is 4,814.
+Zipped with zopfli (`advzip -z -4`), `index.html` comes to 4,731 bytes and `black.html` to 4,729; with `zip -9`, `index.html` is 4,814.
 
 ## License
 
@@ -121,16 +121,16 @@ The rule layer, FideLite `L2` against Aybars, without the trailing comma. Defini
 |---|---|---|
 | `b` | 70 | 81 |
 | `Q` | — | 11 |
-| `G` | 249 | 255 |
+| `G` | 247 | 253 |
 | `V` | 55 | 93 |
 | `L` | 90 | 171 |
 | `M` | 206 | 218 |
-| `l` | 434 | 477 |
-| `A` | 243 | 255 |
+| `l` | 424 | 477 |
+| `A` | 241 | 253 |
 | `T[N]` | 70 | 79 |
 | `d` | 254 | 230 |
 | `S` | 88 | 96 |
-| **script before the bot** | **1,937** | **2,146** |
+| **script before the bot** | **1,923** | **2,142** |
 
 The bot, by part:
 
@@ -138,7 +138,7 @@ The bot, by part:
 |---|---|
 | search `Z` | 1,337 |
 | evaluation `j` | 1,140 |
-| move generator `g` with direction tables `VD`, `VN` | 663 |
+| move generator `g` with direction tables `VD`, `VN` | 657 |
 | static exchange `SE` with least-valuable-attacker `LV` | 641 |
 | tables: piece values `P`, piece-square `K`, `PS`, phase `PH` | 532 |
 | hash and undo: `F`, `H2`, `S1`, `A1`, `A2`, `UN`, `SY` | 393 |
@@ -146,9 +146,9 @@ The bot, by part:
 | move ordering `EM` with the move buffer `MV`, `S3` | 248 |
 | other state: history, killers, counter-moves, TT, game history, pawn masks | 210 |
 | hook that starts the bot after each of your moves | 64 |
-| **total** | **5,510** |
+| **total** | **5,504** |
 
-Rule-layer changes (+209) and the bot (+5,510) make up the 5,719 bytes over FideLite's `L2`; the HTML around the script is the same 289 bytes in both. The figures are for `index.html`; in `black.html`, `T[N]` is one byte shorter.
+Rule-layer changes (+219) and the bot (+5,504) make up the 5,723 bytes over FideLite's `L2`; the HTML around the script is the same 289 bytes in both. The figures are for `index.html`; in `black.html`, `T[N]` is one byte shorter.
 
 </details>
 
@@ -173,6 +173,7 @@ The largest measured steps on the way to the current base. Each row was measured
 | SEE pruning of losing captures in quiescence | +22 ±10, SPRT, stopped at game 1,168 |
 | mobility | removing it, even with the tables re-fitted, cost −58 ±24, SPRT |
 | make/unmake, `Int8Array`, packed moves, incremental evaluation | ×1.48 nodes per second, play identical |
+| October 2026: the rule-layer shortenings carried over from FideLite (castling rook square, start-rank test, square colour, material weight) and three spellings in the bot's move generator (`16*w-8`, `6-5*w`) | −10 bytes; search results identical at fixed depths 4 and 6 over 8 positions, speed unchanged (−0.7%, within noise) |
 
 </details>
 
@@ -184,9 +185,9 @@ The largest measured steps on the way to the current base. Each row was measured
 
 ▶ **[Tarayıcıda hemen oyna](https://cuneytinann.github.io/Aybars_ChessAI/)**
 
-**7.945 baytlık tek bir HTML dosyasında, Stockfish ölçeğinde 2.500–2.600 civarında oynayan bir satranç botu.**
+**7.935 baytlık tek bir HTML dosyasında, Stockfish ölçeğinde 2.500–2.600 civarında oynayan bir satranç botu.**
 
-Aybars, [FideLite](https://www.fidelite.art/tr)'ın `L2` kural seviyesindeki hakeminin üstüne kurulmuş bir arama motoru. Sen beyazla, `black.html`'de siyahla oynuyorsun; Aybars cevap veriyor. Gücü `UCI_Elo` ile sınırlanmış Stockfish'e karşı hamle başına 1 saniyede ~2.520'lik, 2 saniyede ~2.585'lik bir oyuncu gibi skor yapıyor. Bu ölçek kabaca CCRL Blitz motor listesi; insan FIDE puanı değil. Sayfanın tamamı (tahta, arayüz, kurallar ve bot) 7.945 bayt; zip'lenince 4.731.
+Aybars, [FideLite](https://www.fidelite.art/tr)'ın `L2` kural seviyesindeki hakeminin üstüne kurulmuş bir arama motoru. Sen beyazla, `black.html`'de siyahla oynuyorsun; Aybars cevap veriyor. Gücü `UCI_Elo` ile sınırlanmış Stockfish'e karşı hamle başına 1 saniyede ~2.520'lik, 2 saniyede ~2.585'lik bir oyuncu gibi skor yapıyor. Bu ölçek kabaca CCRL Blitz motor listesi; insan FIDE puanı değil. Sayfanın tamamı (tahta, arayüz, kurallar ve bot) 7.935 bayt; zip'lenince 4.731.
 
 Kurallar FideLite'ın: yasal hamleler, rok, geçerken alma, terfi, şah, mat ve pat, yetersiz materyal, kilitli piyon dedektörü `l` (FIDE 5.2.2), tekrar ve 50 hamle sayaçları. Her birinin nasıl okunup uygulandığı **[fidelite.art](https://www.fidelite.art/tr)**'ta anlatılıyor. Bu README yalnızca Aybars'ın eklediklerini anlatıyor: botu ve kural katmanının onu taşımak için geçirdiği birkaç değişikliği.
 
@@ -196,7 +197,7 @@ Kurallar FideLite'ın: yasal hamleler, rok, geçerken alma, terfi, şah, mat ve 
 |---|---|
 | **Taban** | FideLite'ın `L2` kural seviyesi (sayaçlar ve kendiliğinden gelen beraberlikler; saat, teklif ve talep yok), FideLite'ın hızlı sürümü `engine_4x.js`'in yazımlarıyla |
 | **Eklenen** | bir arama (yinelemeli derinleştirmeli alfa-beta, transpozisyon tablosu, sessizlik araması) ve bir değerlendirme (materyal, taş-kare tabloları, piyon yapısı, hareketlilik, yalnız şahı mat etme) |
-| **Boyut** | tek dosya, 7.945 bayt; zip'te 4.731 bayt. Bot, FideLite'ın `L2`'sine (2.226 bayt) 5.719 bayt ekliyor |
+| **Boyut** | tek dosya, 7.935 bayt; zip'te 4.731 bayt. Bot, FideLite'ın `L2`'sine (2.212 bayt) 5.723 bayt ekliyor |
 | **Güç** | sınırlı Stockfish'e karşı hamle başına 1 sn'de ~2.520, 2 sn'de ~2.585 (her biri 100 maç, ±35) |
 | **Düşünme süresi** | hamle başına 2 saniyelik bütçe; arama 12 yarım hamlede durduğu için ortalamada yaklaşık 1 saniye kullanılıyor |
 | **Kilitli piyonlar** | iki tarafın da hiçbir zaman mat edemeyeceği bir şah-piyon yapısı, FideLite'ın dedektörüyle oyunu beraberlikle (`DP`) bitiriyor |
@@ -232,7 +233,7 @@ Tabloda olmayan her şey, iki katmanın ortak kullandığı `indexOf` takma adı
 
 ## Bot
 
-Script'te ilk `d();`'den sonraki her şey bot: 5.510 bayt.
+Script'te ilk `d();`'den sonraki her şey bot: 5.504 bayt.
 
 | parça | ne yapıyor |
 |---|---|
@@ -269,11 +270,11 @@ Kapsam bir hakemin üstüne bot, yeni bir motor değil. Kural katmanı FideLite'
 
 | dosya | boyut | içerik |
 |---|---|---|
-| `index.html` | 7.945 B | oyun, kurallar ve bot; sen beyazla oynuyorsun |
-| `black.html` | 7.944 B | sen siyahla oynarken aynısı: tahta çevrilmiş (`w^56` yerine `w^7`) ve botun rengi `D` 0'dan 1'e alınmış |
+| `index.html` | 7.935 B | oyun, kurallar ve bot; sen beyazla oynuyorsun |
+| `black.html` | 7.934 B | sen siyahla oynarken aynısı: tahta çevrilmiş (`w^56` yerine `w^7`) ve botun rengi `D` 0'dan 1'e alınmış |
 | `LICENSE` | | MIT Lisansı |
 
-Zopfli ile (`advzip -z -4`) zip'lenince `index.html` 4.731, `black.html` 4.743 bayt tutuyor; `zip -9` ile `index.html` 4.814.
+Zopfli ile (`advzip -z -4`) zip'lenince `index.html` 4.731, `black.html` 4.729 bayt tutuyor; `zip -9` ile `index.html` 4.814.
 
 ## Lisans
 
@@ -301,16 +302,16 @@ Kural katmanı, FideLite `L2`'ye karşı Aybars, sondaki virgül hariç. Listele
 |---|---|---|
 | `b` | 70 | 81 |
 | `Q` | — | 11 |
-| `G` | 249 | 255 |
+| `G` | 247 | 253 |
 | `V` | 55 | 93 |
 | `L` | 90 | 171 |
 | `M` | 206 | 218 |
-| `l` | 434 | 477 |
-| `A` | 243 | 255 |
+| `l` | 424 | 477 |
+| `A` | 241 | 253 |
 | `T[N]` | 70 | 79 |
 | `d` | 254 | 230 |
 | `S` | 88 | 96 |
-| **bottan önceki script** | **1.937** | **2.146** |
+| **bottan önceki script** | **1.923** | **2.142** |
 
 Bot, parça parça:
 
@@ -318,7 +319,7 @@ Bot, parça parça:
 |---|---|
 | arama `Z` | 1.337 |
 | değerlendirme `j` | 1.140 |
-| hamle üretici `g`, yön tabloları `VD`, `VN` ile | 663 |
+| hamle üretici `g`, yön tabloları `VD`, `VN` ile | 657 |
 | statik alış değerlendirmesi `SE`, en ucuz saldıran `LV` ile | 641 |
 | tablolar: taş değerleri `P`, taş-kare `K`, `PS`, evre `PH` | 532 |
 | hash ve geri alma: `F`, `H2`, `S1`, `A1`, `A2`, `UN`, `SY` | 393 |
@@ -326,9 +327,9 @@ Bot, parça parça:
 | hamle sıralama `EM`, hamle tamponu `MV`, `S3` ile | 248 |
 | öteki durum: geçmiş, killer, karşı hamle, TT, oyun geçmişi, piyon maskeleri | 210 |
 | her hamlenden sonra botu başlatan kanca | 64 |
-| **toplam** | **5.510** |
+| **toplam** | **5.504** |
 
-Kural katmanındaki değişiklikler (+209) ve bot (+5.510), FideLite'ın `L2`'sine eklenen 5.719 baytı oluşturuyor; script'in çevresindeki HTML ikisinde de aynı 289 bayt. Sayılar `index.html` için; `black.html`'de `T[N]` bir bayt kısa.
+Kural katmanındaki değişiklikler (+219) ve bot (+5.504), FideLite'ın `L2`'sine eklenen 5.723 baytı oluşturuyor; script'in çevresindeki HTML ikisinde de aynı 289 bayt. Sayılar `index.html` için; `black.html`'de `T[N]` bir bayt kısa.
 
 </details>
 
@@ -353,5 +354,6 @@ Bugünkü tabana giden yoldaki en büyük ölçülmüş adımlar. Her satır ken
 | sessizlik aramasında kaybettiren alışların SEE ile budanması | +22 ±10, SPRT, 1.168. maçta durdu |
 | hareketlilik | tablolar yeniden uydurulsa bile çıkarılması −58 ±24'e mal oldu, SPRT |
 | yap/geri al, `Int8Array`, paketli hamleler, artımlı değerlendirme | saniyede ×1,48 düğüm, oyun birebir aynı |
+| Ekim 2026: FideLite'tan taşınan kural katmanı kısaltmaları (rok kalesinin karesi, başlangıç yatayı testi, kare rengi, materyal ağırlığı) ve botun hamle üreticisinde üç yazım (`16*w-8`, `6-5*w`) | −10 bayt; 8 pozisyonda sabit 4 ve 6 derinlikte arama sonuçları birebir aynı, hız değişmedi (−%0,7, gürültü sınırında) |
 
 </details>
